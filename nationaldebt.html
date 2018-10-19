@@ -1,0 +1,48 @@
+<style> 
+	body {
+		text-align: center;
+		padding: 20px;
+		font-family: Helvetica;
+	}
+
+	button {
+		background: #0084ff;
+		border: none;
+		border-radius: 5px;
+		padding: 8px 14px;
+		font-size: 15px;
+		color: #fff;
+	}
+
+
+</style>
+
+<body>
+	<img src="https://i.imgur.com/gEaAiSp.png" width="200">
+	<br><br>
+	Item: <input name="item">
+	<br><br>
+	Price: <input name="price"> 
+	<br><br>
+	<button>Calculate!</button>
+	<p id="output"></p>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    var total
+    let debt = $.getJSON('http://allorigins.me/get?url=https%3A//www.treasurydirect.gov/NP_WS/debt/current.JSON', function(){
+	    total = JSON.parse(debt.responseJSON.contents).totalDebt
+        });
+	let button = $("button")
+	button.on("click", function(){
+	    var price = $("input[name=price").val()
+		var item = item ? price || $("input[name=item]").val() + "s" : "* " + price
+		var unit = price ? Math.floor(total/price) : "$" + total
+	    $("#output").html("<b>#TheNationalDebtIs </b>" + unit + " " + item)
+	    $("input[name=item]").select()
+	})
+	
+	$("input[name=item]").select()
+</script>
+</body>
