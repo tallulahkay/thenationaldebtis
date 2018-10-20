@@ -16,33 +16,55 @@
 
 
 </style>
+<head>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+        var total;
+
+        $.getJSON("http://allorigins.me/get?url=https%3A//www.treasurydirect.gov/NP_WS/debt/current.JSON")
+            .done((data) => total = JSON.parse(data.contents).totalDebt);
+
+        function numToUSD(num) {
+        	let temp = num + "";
+
+
+            return "$" + temp;
+        }
+
+        function submitForm() {
+            let price = $("input[name=price").val(),
+                item = price ? $("input[name=item]").val() + "s" : "",
+                unit = price ? Math.floor(total/price) : "$" + total;
+
+            $("output").text(unit + " " + item); // 21630680000000
+            $("label[for=debtIs]").show();
+            $("input[name=item]").select();
+        }
+
+        $(function() {
+            $("input[name=item]").select();
+        });
+    </script>
+</head>
 
 <body>
-	<img src="https://i.imgur.com/gEaAiSp.png" width="200">
-	<br><br>
-	Item: <input name="item">
-	<br><br>
-	Price: <input name="price"> 
-	<br><br>
-	<button>Calculate!</button>
-	<p id="output"></p>
+    <img src="https://i.imgur.com/gEaAiSp.png" width="200">
+    <form onsubmit="return false">
+        <label for="item">
+            Item: 
+            <input id="item" type="text" name="item">
+        </label>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <label for="price">
+            Price: 
+            <input id="price" type="number" name="price" placeholder="$" step=".01">
+        </label>
 
-<script>
-    var total
-    let debt = $.getJSON('http://allorigins.me/get?url=https%3A//www.treasurydirect.gov/NP_WS/debt/current.JSON', function(){
-	    total = JSON.parse(debt.responseJSON.contents).totalDebt
-        });
-	let button = $("button")
-	button.on("click", function(){
-	    var price = $("input[name=price").val()
-		var item = item ? price || $("input[name=item]").val() + "s" : "* " + price
-		var unit = price ? Math.floor(total/price) : "$" + total
-	    $("#output").html("<b>#TheNationalDebtIs </b>" + unit + " " + item)
-	    $("input[name=item]").select()
-	})
-	
-	$("input[name=item]").select()
-</script>
+        <input type="submit" value="Calculate!" onclick="submitForm()"/>
+        
+        <label for="debtIs">
+            <strong>#TheNationalDebtIs </strong>
+            <output id="debtIs" name="debtIs">
+        </label>
+    </form>
 </body>
